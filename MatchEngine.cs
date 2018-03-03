@@ -14,7 +14,7 @@ namespace MarchMadness2018
         }
 
         public string Process() {
-            string result = "Match Engine Failed";
+            string result = "";
 
             return result;
         }

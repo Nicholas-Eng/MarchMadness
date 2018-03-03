@@ -30,7 +30,6 @@ namespace MarchMadness2018
             }
             else {
                 Console.WriteLine("Match Engine Failed");
-                Console.ReadLine();
             }
 
             ProcessAnotherMatch();
