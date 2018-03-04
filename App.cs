@@ -22,14 +22,13 @@ namespace MarchMadness2018
             Console.WriteLine("Please Enter the Second Team's Name:");
             string team2Name = Console.ReadLine();
 
-            var engine = new MatchEngine(team1Name, team2Name);
-            string engineResult = engine.Process();
+            string engineResult = new MatchEngine().Process(team1Name, team2Name);
 
             if(!string.IsNullOrWhiteSpace(engineResult)) {
                 Console.WriteLine(engineResult);
             }
             else {
-                Console.WriteLine("Match Engine Failed");
+                Logger.Error("Match Engine Failed");
             }
 
             ProcessAnotherMatch();
@@ -38,7 +37,7 @@ namespace MarchMadness2018
         private void ProcessAnotherMatch() {
              Console.WriteLine("Process Another Match? (Y/N)");
             
-            switch(Console.ReadLine())
+            switch(Console.ReadLine().ToUpper())
             {
                 case "Y":
                     Start();
