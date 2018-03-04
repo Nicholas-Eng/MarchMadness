@@ -16,13 +16,19 @@ namespace MarchMadness2018
         }
 
         public void Start() {           
-            Console.WriteLine("Please Enter the First Team's Name:");
-            string team1Name = Console.ReadLine();
+            // TODO: Uncomment
+            // Console.WriteLine("Please Enter the First Team's Name:");
+            // string team1Name = Console.ReadLine();
 
-            Console.WriteLine("Please Enter the Second Team's Name:");
-            string team2Name = Console.ReadLine();
+            // Console.WriteLine("Please Enter the Second Team's Name:");
+            // string team2Name = Console.ReadLine();
 
-            string engineResult = new MatchEngine().Process(team1Name, team2Name);
+            // TODO: Remove stub code for debugging
+            string team1Name = "Kansas St";
+            string team2Name = "Gonzaga";
+
+            new DataLoader().Load(team1Name, team2Name);
+            string engineResult = new MatchEngine().Process();
 
             if(!string.IsNullOrWhiteSpace(engineResult)) {
                 Console.WriteLine(engineResult);
