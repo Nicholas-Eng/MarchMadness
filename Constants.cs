@@ -12,9 +12,13 @@ namespace MarchMadness2018
 
         public static string NCAA_TOURNEY_COMPACT_RESULTS_FILE { get { return "NCAATourneyCompactResults"; } }
 
+        public static string NCAA_TOURNEY_DETAILED_RESULTS_FILE { get { return "NCAATourneyDetailedResults"; } }
+
         public static string NCAA_TOURNEY_SEEDS_FILE { get { return "NCAATourneySeeds"; } }
 
         public static string REGULAR_SEASON_COMPACT_RESULTS_FILE { get { return "RegularSeasonCompactResults"; } }
+
+        public static string REGULAR_SEASON_DETAILED_RESULTS_FILE { get { return "RegularSeasonDetailedResults"; } }
 
         public static string TEAM_CONFERENCES_FILE { get { return "TeamConferences"; } }
 

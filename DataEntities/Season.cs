@@ -4,24 +4,12 @@ namespace MarchMadness2018.DataEntities
     {
         public int Seed { get; set; }
 
-        public string Conference { get; set; }
+        public Conference Conference { get; set; }
 
-        public int ConferenceRanking { get; set; }
+        public RegularSeason RegularSeason { get; set; }
 
-        public int TotalRegularSeasonWins { get; set; }
+        public bool WasInNCAATourneySeason { get; set; }
 
-        public double AverageRegularSeasonWinScore { get; set; }
-
-        public int TotalRegularSeasonLoses { get; set; }
-
-        public double AverageRegularSeasonLoseScore { get; set; }
-
-        public int TotalNCAATourneySeasonWins { get; set; }
-
-        public double AverageNCAATourneySeasonWinScore { get; set; }
-
-        public int TotalNCAATourneySeasonLoses { get; set; }
-
-        public double AverageNCAATourneySeasonLoseScore { get; set; }
+        public NCAATourneySeason NCAATourneySeason { get; set; }
     }
 }
