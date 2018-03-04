@@ -2,16 +2,14 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
-using Entities;
 
 namespace MarchMadness2018
 {
     public static class CSVParser
     {
-        private const string DATA_FOLDER = "data\\";
         public static IEnumerable<T> ParseCsvFile<T>(string fileName) {
 
-            fileName = DATA_FOLDER + fileName;
+            fileName = Constants.DATA_FOLDER + Path.DirectorySeparatorChar + fileName;
 
             if(!fileName.EndsWith(".csv"))
             {
@@ -28,7 +26,7 @@ namespace MarchMadness2018
                     string[] propertyNames = new string[]{};
                     string[] row;
                     bool isHeader = true;
-                    while ((line = streamReader.ReadLine()) != null)
+                    while (!string.IsNullOrWhiteSpace(line = streamReader.ReadLine()))
                     {
                         if(isHeader)
                         {

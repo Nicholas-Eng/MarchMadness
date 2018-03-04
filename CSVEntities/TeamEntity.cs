@@ -1,8 +1,6 @@
-using System;
-
-namespace Entities
+namespace MarchMadness2018.CSVEntities
 {
-    public class Team
+    public class TeamEntity
     {
         public int TeamID { get; set; }
 

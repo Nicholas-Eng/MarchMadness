@@ -1,4 +1,5 @@
 using System;
+using MarchMadness2018.Engines;
 
 namespace MarchMadness2018
 {
@@ -9,7 +10,6 @@ namespace MarchMadness2018
             Console.WriteLine("**********************************************");
             Console.WriteLine("***** Sila Solutions Group March Madness *****");
             Console.WriteLine("***** Author: Nicholas Eng               *****");
-            Console.WriteLine("***** Year: 2018                         *****");
             Console.WriteLine("**********************************************");
             Console.WriteLine("**********************************************");        
             Console.WriteLine("");    
