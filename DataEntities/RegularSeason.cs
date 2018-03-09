@@ -1,4 +1,4 @@
-namespace MarchMadness2018.DataEntities
+namespace MarchMadness.DataEntities
 {
     public class RegularSeason
     {

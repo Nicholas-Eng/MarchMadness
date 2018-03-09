@@ -1,8 +1,8 @@
-using MarchMadness2018;
-using MarchMadness2018.CSVEntities;
-using MarchMadness2018.DataEntities;
+using MarchMadness;
+using MarchMadness.CSVEntities;
+using MarchMadness.DataEntities;
 
-namespace MarchMadness2018.Mappers
+namespace MarchMadness.Mappers
 {
     public static class TeamMapper
     {

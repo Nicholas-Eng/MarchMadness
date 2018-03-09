@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace MarchMadness2018
+namespace MarchMadness
 {
     class Program
     {

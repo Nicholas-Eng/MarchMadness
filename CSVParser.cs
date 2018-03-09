@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 
-namespace MarchMadness2018
+namespace MarchMadness
 {
     public static class CSVParser
     {

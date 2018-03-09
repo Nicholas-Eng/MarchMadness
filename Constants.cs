@@ -1,4 +1,4 @@
-namespace MarchMadness2018
+namespace MarchMadness
 {
     public static class Constants
     {

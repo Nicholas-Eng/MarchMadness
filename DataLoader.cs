@@ -1,11 +1,11 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using MarchMadness2018.CSVEntities;
-using MarchMadness2018.DataEntities;
-using MarchMadness2018.Mappers;
+using MarchMadness.CSVEntities;
+using MarchMadness.DataEntities;
+using MarchMadness.Mappers;
 
-namespace MarchMadness2018
+namespace MarchMadness
 {
     public class DataLoader
     {

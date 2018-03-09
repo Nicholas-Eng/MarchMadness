@@ -1,4 +1,4 @@
-namespace MarchMadness2018.CSVEntities
+namespace MarchMadness.CSVEntities
 {
     public class NCAATourneyCompactResultsEntity
     {

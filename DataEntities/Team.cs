@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace MarchMadness2018.DataEntities
+namespace MarchMadness.DataEntities
 {
     public class Team
     { 

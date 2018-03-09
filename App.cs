@@ -1,7 +1,7 @@
 using System;
-using MarchMadness2018.Engines;
+using MarchMadness.Engines;
 
-namespace MarchMadness2018
+namespace MarchMadness
 {
     public class App
     {
