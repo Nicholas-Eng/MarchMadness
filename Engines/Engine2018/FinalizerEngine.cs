@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using MarchMadness.DataEntities;
@@ -16,8 +17,7 @@ namespace MarchMadness.Engines.Engine2018
             int count = seasons.Count;
             foreach(var season in seasons)
             {
-                CalculateSeasonResult(season, matchResults.Team1Results[season], matchResults.Team2Results[season], count / seasons.Count);
-
+                CalculateSeasonResult(season, matchResults.Team1Results[season], matchResults.Team2Results[season], Math.Exp(count));
                 count--;
             }
 

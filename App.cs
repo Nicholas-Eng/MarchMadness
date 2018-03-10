@@ -25,8 +25,21 @@ namespace MarchMadness
             // string team2Name = Console.ReadLine();
 
             // TODO: Remove stub code for debugging
-            string team1Name = "North Carolina"; //"Kansas St";
-            string team2Name = "Gonzaga";
+            //string team1Name = "North Carolina";
+            //string team2Name = "Gonzaga";
+            
+            //string team1Name = "SMU";
+            //string team2Name = "USC";
+
+            //string team1Name = "Wisconsin";
+            //string team2Name = "Virginia Tech";
+
+            // string team1Name = "Creighton";
+            // string team2Name = "Rhode Island";
+
+            string team1Name = "Northwestern";
+            string team2Name = "Vanderbilt";
+
             var teams = new string[] {team1Name, team2Name};
 
             int winnerResult = -1;

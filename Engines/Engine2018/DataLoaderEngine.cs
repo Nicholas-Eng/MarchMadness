@@ -170,7 +170,7 @@ namespace MarchMadness.Engines.Engine2018
                 ncaaSeasonToLoad.AverageNCAATourneySeasonLoseScore = ncaaTourneySeasons.Where(x => x.Season == season && x.LTeamID == team.TeamId).Average(w => w.LScore);
             }
 
-            team.Seasons[season].WasInNCAATourneySeason = ncaaSeasonToLoad.TotalNCAATourneySeasonWins > 0 && ncaaSeasonToLoad.TotalNCAATourneySeasonLoses > 0;
+            team.Seasons[season].WasInNCAATourneySeason = ncaaSeasonToLoad.TotalNCAATourneySeasonWins > 0 || ncaaSeasonToLoad.TotalNCAATourneySeasonLoses > 0;
 
             team.Seasons[season].NCAATourneySeason = ncaaSeasonToLoad;
         }
@@ -189,6 +189,8 @@ namespace MarchMadness.Engines.Engine2018
 
         private void LoadConferenceRanking(IEnumerable<ConferenceRankingsEntity> conferenceRankings, IEnumerable<TeamConferencesEntity> teamConferences, Team team, int season)
         {
+            const int DEFAULT_CONFERENCE_RANKING = 11;
+
             var conferenceToLoad = new Conference();
             
             var conf = teamConferences.Where(x => x.TeamID == team.TeamId && x.Season == season).FirstOrDefault();
@@ -197,11 +199,11 @@ namespace MarchMadness.Engines.Engine2018
             if(conf != null)
             {
                 var confRanking = conferenceRankings.Where(x => x.Season == season && x.ConfAbbrev == conferenceToLoad.ConferenceAbbrev).FirstOrDefault();
-                conferenceToLoad.ConferenceRanking = confRanking != null ? confRanking.Ranking : -1;
+                conferenceToLoad.ConferenceRanking = confRanking != null ? confRanking.Ranking : DEFAULT_CONFERENCE_RANKING;
             }
             else 
             {
-                conferenceToLoad.ConferenceRanking = -1;
+                conferenceToLoad.ConferenceRanking = DEFAULT_CONFERENCE_RANKING;
             }
             
             team.Seasons[season].Conference = conferenceToLoad;
@@ -245,19 +247,23 @@ namespace MarchMadness.Engines.Engine2018
             IEnumerable<RegularSeasonDetailedResultsEntity> teamRegSeasonDetails = regSeasonDetails.Where(x => x.LTeamID == team.TeamId &&  x.Season == season);
             RegularSeason regularSeasonToLoad = team.Seasons[season].RegularSeason;
             
-            regularSeasonToLoad.AverageRegularSeasonLoseFieldGoalsMade = teamRegSeasonDetails.Average(x => x.LFGM);
-            regularSeasonToLoad.AverageRegularSeasonLoseFieldGoalsAttempted = teamRegSeasonDetails.Average(x => x.LFGA);
-            regularSeasonToLoad.AverageRegularSeasonLoseThreePointersMade = teamRegSeasonDetails.Average(x => x.LFGM3);
-            regularSeasonToLoad.AverageRegularSeasonLoseThreePointersAttempted = teamRegSeasonDetails.Average(x => x.LFGA3);
-            regularSeasonToLoad.AverageRegularSeasonLoseFreeThrowsMade = teamRegSeasonDetails.Average(x => x.LFTM);
-            regularSeasonToLoad.AverageRegularSeasonLoseFreeThrowsAttempted = teamRegSeasonDetails.Average(x => x.LFTA);
-            regularSeasonToLoad.AverageRegularSeasonLoseOffensiveRebounds = teamRegSeasonDetails.Average(x => x.LOR);
-            regularSeasonToLoad.AverageRegularSeasonLoseDefensiveRebounds = teamRegSeasonDetails.Average(x => x.LDR);
-            regularSeasonToLoad.AverageRegularSeasonLoseAssists = teamRegSeasonDetails.Average(x => x.LAst);
-            regularSeasonToLoad.AverageRegularSeasonLoseTurnoversCommitted = teamRegSeasonDetails.Average(x => x.LTO);
-            regularSeasonToLoad.AverageRegularSeasonLoseSteals = teamRegSeasonDetails.Average(x => x.LStl);
-            regularSeasonToLoad.AverageRegularSeasonLoseBlocks = teamRegSeasonDetails.Average(x => x.LBlk);
-            regularSeasonToLoad.AverageRegularSeasonLosePersonalFoulsCommitted = teamRegSeasonDetails.Average(x => x.LPF);
+            // If team lost any games for this season
+            if(teamRegSeasonDetails.Any())
+            {
+                regularSeasonToLoad.AverageRegularSeasonLoseFieldGoalsMade = teamRegSeasonDetails.Average(x => x.LFGM);
+                regularSeasonToLoad.AverageRegularSeasonLoseFieldGoalsAttempted = teamRegSeasonDetails.Average(x => x.LFGA);
+                regularSeasonToLoad.AverageRegularSeasonLoseThreePointersMade = teamRegSeasonDetails.Average(x => x.LFGM3);
+                regularSeasonToLoad.AverageRegularSeasonLoseThreePointersAttempted = teamRegSeasonDetails.Average(x => x.LFGA3);
+                regularSeasonToLoad.AverageRegularSeasonLoseFreeThrowsMade = teamRegSeasonDetails.Average(x => x.LFTM);
+                regularSeasonToLoad.AverageRegularSeasonLoseFreeThrowsAttempted = teamRegSeasonDetails.Average(x => x.LFTA);
+                regularSeasonToLoad.AverageRegularSeasonLoseOffensiveRebounds = teamRegSeasonDetails.Average(x => x.LOR);
+                regularSeasonToLoad.AverageRegularSeasonLoseDefensiveRebounds = teamRegSeasonDetails.Average(x => x.LDR);
+                regularSeasonToLoad.AverageRegularSeasonLoseAssists = teamRegSeasonDetails.Average(x => x.LAst);
+                regularSeasonToLoad.AverageRegularSeasonLoseTurnoversCommitted = teamRegSeasonDetails.Average(x => x.LTO);
+                regularSeasonToLoad.AverageRegularSeasonLoseSteals = teamRegSeasonDetails.Average(x => x.LStl);
+                regularSeasonToLoad.AverageRegularSeasonLoseBlocks = teamRegSeasonDetails.Average(x => x.LBlk);
+                regularSeasonToLoad.AverageRegularSeasonLosePersonalFoulsCommitted = teamRegSeasonDetails.Average(x => x.LPF);
+            }
         }
 
         private void LoadNCAATourneySeasonTeamBoxScores()
@@ -278,7 +284,7 @@ namespace MarchMadness.Engines.Engine2018
             IEnumerable<NCAATourneyDetailedResultsEntity> teamNcaaTourneySeasonDetails = ncaaTourneySeasonDetails.Where(x => x.WTeamID == team.TeamId &&  x.Season == season);
             NCAATourneySeason ncaaTourneySeasonToLoad = team.Seasons[season].NCAATourneySeason;
             
-            if(team.Seasons[season].WasInNCAATourneySeason)
+            if(team.Seasons[season].WasInNCAATourneySeason && teamNcaaTourneySeasonDetails.Any())
             {
                 ncaaTourneySeasonToLoad.AverageNCAATourneySeasonWinFieldGoalsMade = teamNcaaTourneySeasonDetails.Average(x => x.WFGM);
                 ncaaTourneySeasonToLoad.AverageNCAATourneySeasonWinFieldGoalsAttempted = teamNcaaTourneySeasonDetails.Average(x => x.WFGA);
@@ -298,10 +304,12 @@ namespace MarchMadness.Engines.Engine2018
 
         private void LoadNCAATourneySeasonLoseTeamBoxScore(IEnumerable<NCAATourneyDetailedResultsEntity> ncaaTourneySeasonDetails, Team team, int season)
         {
+            // Get detailed result for current season where current team lost
             IEnumerable<NCAATourneyDetailedResultsEntity> teamNcaaTourneySeasonDetails = ncaaTourneySeasonDetails.Where(x => x.LTeamID == team.TeamId &&  x.Season == season);
             NCAATourneySeason ncaaTourneySeasonToLoad = team.Seasons[season].NCAATourneySeason;
             
-            if(team.Seasons[season].WasInNCAATourneySeason)
+            // If team was in NCAA tourney this season and lost any games
+            if(team.Seasons[season].WasInNCAATourneySeason && teamNcaaTourneySeasonDetails.Any())
             {
                 ncaaTourneySeasonToLoad.AverageNCAATourneySeasonLoseFieldGoalsMade = teamNcaaTourneySeasonDetails.Average(x => x.LFGM);
                 ncaaTourneySeasonToLoad.AverageNCAATourneySeasonLoseFieldGoalsAttempted = teamNcaaTourneySeasonDetails.Average(x => x.LFGA);
