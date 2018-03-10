@@ -5,17 +5,16 @@ using MarchMadness.CSVEntities;
 using MarchMadness.DataEntities;
 using MarchMadness.Mappers;
 
-namespace MarchMadness
+namespace MarchMadness.Engines.Engine2018
 {
-    public class DataLoader
+    public class DataLoaderEngine : IDataLoaderEngine
     {
-        private Team _team1;
-        private Team _team2;
+        public Team Team1 { get; private set; }
 
-        public string Load(string team1Name, string team2Name)
+        public Team Team2 { get; private set; }
+
+        public bool Load(string team1Name, string team2Name)
         {
-            string result = "";
-
             if(LoadTeams(team1Name, team2Name))
             {
                 LoadSeasons();
@@ -25,9 +24,10 @@ namespace MarchMadness
                 LoadConferenceRankings();
                 LoadRegularSeasonTeamBoxScores();
                 LoadNCAATourneySeasonTeamBoxScores();
+                return true;
             }
 
-            return result;
+            return false;
         }
 
         private bool LoadTeams(string team1Name, string team2Name)
@@ -35,15 +35,15 @@ namespace MarchMadness
             bool result = true;
 
             var teams = CSVParser.ParseCsvFile<TeamEntity>(Constants.TEAMS_FILE);
-            _team1 = teams.Select(x => TeamMapper.Map(x)).Where(t => t.TeamName.Equals(team1Name, StringComparison.InvariantCultureIgnoreCase)).FirstOrDefault();
-            _team2 = teams.Select(x => TeamMapper.Map(x)).Where(t => t.TeamName.Equals(team2Name, StringComparison.InvariantCultureIgnoreCase)).FirstOrDefault();
+            Team1 = teams.Select(x => TeamMapper.Map(x)).Where(t => t.TeamName.Equals(team1Name, StringComparison.InvariantCultureIgnoreCase)).FirstOrDefault();
+            Team2 = teams.Select(x => TeamMapper.Map(x)).Where(t => t.TeamName.Equals(team2Name, StringComparison.InvariantCultureIgnoreCase)).FirstOrDefault();
 
-            if(_team1 == null) {
+            if(Team1 == null) {
                 Logger.Error("Failed to find team with name: " + team1Name);
                 result = false;
             }
 
-            if(_team2 == null) {
+            if(Team2 == null) {
                 Logger.Error("Failed to find team with name: " + team2Name);
                 result = false;
             }
@@ -53,15 +53,15 @@ namespace MarchMadness
 
         private void LoadSeasons()
         {
-            _team1.Seasons = new Dictionary<int, Season>();
-            _team2.Seasons = new Dictionary<int, Season>();
+            Team1.Seasons = new Dictionary<int, Season>();
+            Team2.Seasons = new Dictionary<int, Season>();
 
             string[] seasonsToLoad = Constants.CSV_LIST_SEASONS.Split(',');
 
             foreach(string season in seasonsToLoad)
             {
-                LoadSeason(_team1, season);
-                LoadSeason(_team2, season);
+                LoadSeason(Team1, season);
+                LoadSeason(Team2, season);
             }
         }
 
@@ -82,10 +82,10 @@ namespace MarchMadness
         {
             var seeds = CSVParser.ParseCsvFile<NCAATourneySeedsEntity>(Constants.NCAA_TOURNEY_SEEDS_FILE);
 
-            foreach(var season in _team1.Seasons)
+            foreach(var season in Team1.Seasons)
             {
-                LoadSeed(seeds, _team1, season.Key);
-                LoadSeed(seeds, _team2, season.Key);
+                LoadSeed(seeds, Team1, season.Key);
+                LoadSeed(seeds, Team2, season.Key);
             }
         }
 
@@ -117,10 +117,10 @@ namespace MarchMadness
         {
             var regularSeasons = CSVParser.ParseCsvFile<RegularSeasonCompactResultsEntity>(Constants.REGULAR_SEASON_COMPACT_RESULTS_FILE);
 
-            foreach(var season in _team1.Seasons)
+            foreach(var season in Team1.Seasons)
             {
-                LoadRegularSeason(regularSeasons, _team1, season.Key);
-                LoadRegularSeason(regularSeasons, _team2, season.Key);
+                LoadRegularSeason(regularSeasons, Team1, season.Key);
+                LoadRegularSeason(regularSeasons, Team2, season.Key);
             }
         }
 
@@ -147,10 +147,10 @@ namespace MarchMadness
         {
             var ncaaTourneySeasons = CSVParser.ParseCsvFile<NCAATourneyCompactResultsEntity>(Constants.NCAA_TOURNEY_COMPACT_RESULTS_FILE);
 
-            foreach(var season in _team1.Seasons)
+            foreach(var season in Team1.Seasons)
             {
-                LoadNCAATourneySeason(ncaaTourneySeasons, _team1, season.Key);
-                LoadNCAATourneySeason(ncaaTourneySeasons, _team2, season.Key);
+                LoadNCAATourneySeason(ncaaTourneySeasons, Team1, season.Key);
+                LoadNCAATourneySeason(ncaaTourneySeasons, Team2, season.Key);
             }
         }
 
@@ -180,10 +180,10 @@ namespace MarchMadness
             var conferenceRankings = CSVParser.ParseCsvFile<ConferenceRankingsEntity>(Constants.CONFERENCE_RANKINGS_FILE);
             var teamConferences = CSVParser.ParseCsvFile<TeamConferencesEntity>(Constants.TEAM_CONFERENCES_FILE);
 
-            foreach(var season in _team1.Seasons)
+            foreach(var season in Team1.Seasons)
             {
-                LoadConferenceRanking(conferenceRankings, teamConferences, _team1, season.Key);
-                LoadConferenceRanking(conferenceRankings, teamConferences, _team2, season.Key);
+                LoadConferenceRanking(conferenceRankings, teamConferences, Team1, season.Key);
+                LoadConferenceRanking(conferenceRankings, teamConferences, Team2, season.Key);
             }
         }
 
@@ -211,12 +211,12 @@ namespace MarchMadness
         {
             var regSeasonDetails = CSVParser.ParseCsvFile<RegularSeasonDetailedResultsEntity>(Constants.REGULAR_SEASON_DETAILED_RESULTS_FILE);
 
-            foreach(var season in _team1.Seasons)
+            foreach(var season in Team1.Seasons)
             {
-                LoadRegularSeasonWinTeamBoxScore(regSeasonDetails, _team1, season.Key);
-                LoadRegularSeasonWinTeamBoxScore(regSeasonDetails, _team2, season.Key);
-                LoadRegularSeasonLoseTeamBoxScore(regSeasonDetails, _team1, season.Key);
-                LoadRegularSeasonLoseTeamBoxScore(regSeasonDetails, _team2, season.Key);
+                LoadRegularSeasonWinTeamBoxScore(regSeasonDetails, Team1, season.Key);
+                LoadRegularSeasonWinTeamBoxScore(regSeasonDetails, Team2, season.Key);
+                LoadRegularSeasonLoseTeamBoxScore(regSeasonDetails, Team1, season.Key);
+                LoadRegularSeasonLoseTeamBoxScore(regSeasonDetails, Team2, season.Key);
             }
         }
 
@@ -264,12 +264,12 @@ namespace MarchMadness
         {
             var ncaaTourneySeasonDetails = CSVParser.ParseCsvFile<NCAATourneyDetailedResultsEntity>(Constants.NCAA_TOURNEY_DETAILED_RESULTS_FILE);
 
-            foreach(var season in _team1.Seasons)
+            foreach(var season in Team1.Seasons)
             {
-                LoadNCAATourneySeasonWinTeamBoxScore(ncaaTourneySeasonDetails, _team1, season.Key);
-                LoadNCAATourneySeasonWinTeamBoxScore(ncaaTourneySeasonDetails, _team2, season.Key);
-                LoadNCAATourneySeasonLoseTeamBoxScore(ncaaTourneySeasonDetails, _team1, season.Key);
-                LoadNCAATourneySeasonLoseTeamBoxScore(ncaaTourneySeasonDetails, _team2, season.Key);
+                LoadNCAATourneySeasonWinTeamBoxScore(ncaaTourneySeasonDetails, Team1, season.Key);
+                LoadNCAATourneySeasonWinTeamBoxScore(ncaaTourneySeasonDetails, Team2, season.Key);
+                LoadNCAATourneySeasonLoseTeamBoxScore(ncaaTourneySeasonDetails, Team1, season.Key);
+                LoadNCAATourneySeasonLoseTeamBoxScore(ncaaTourneySeasonDetails, Team2, season.Key);
             }
         }
 

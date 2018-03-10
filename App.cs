@@ -1,5 +1,6 @@
 using System;
-using MarchMadness.Engines;
+using MarchMadness.DataEntities;
+using MarchMadness.Engines.Engine2018;
 
 namespace MarchMadness
 {
@@ -24,18 +25,30 @@ namespace MarchMadness
             // string team2Name = Console.ReadLine();
 
             // TODO: Remove stub code for debugging
-            string team1Name = "Kansas St";
+            string team1Name = "North Carolina"; //"Kansas St";
             string team2Name = "Gonzaga";
+            var teams = new string[] {team1Name, team2Name};
 
-            new DataLoader().Load(team1Name, team2Name);
-            string engineResult = new MatchEngine().Process();
+            int winnerResult = -1;
+            var dataLoaderEngine = new DataLoaderEngine();
+            var matchEngine = new MatchEngine();
+            var finalizerEngine = new FinalizerEngine();
+            if(dataLoaderEngine.Load(team1Name, team2Name))
+            {
+                MatchResults engineResult = matchEngine.Process(dataLoaderEngine.Team1, dataLoaderEngine.Team2);
+                winnerResult = finalizerEngine.ComputeWinner(engineResult);
+            }
+            
+            if(winnerResult < 0 || winnerResult > 1)
+            {
+                Logger.Error("Failed to decided a winner");
+                
+            }
+            else
+            {
+                Console.WriteLine(teams[winnerResult]);
+            }
 
-            if(!string.IsNullOrWhiteSpace(engineResult)) {
-                Console.WriteLine(engineResult);
-            }
-            else {
-                Logger.Error("Match Engine Failed");
-            }
 
             ProcessAnotherMatch();
         }
