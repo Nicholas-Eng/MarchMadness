@@ -4,7 +4,7 @@ using MarchMadness.DataEntities;
 
 namespace MarchMadness.Engines.Engine2018
 {
-    public class FinalizerEngine
+    public class FinalizerEngine : IFinalizerEngine
     {
         private readonly Dictionary<int, double> _team1SeasonResults = new Dictionary<int, double>();
         private readonly Dictionary<int, double> _team2SeasonResults = new Dictionary<int, double>();
