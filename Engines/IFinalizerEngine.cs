@@ -4,6 +4,6 @@ namespace MarchMadness.Engines
 {
     public interface IFinalizerEngine
     {
-         int ComputeWinner(MatchResults matchResults);
+         FinalResult ComputeWinner(MatchResults matchResults);
     }
 }

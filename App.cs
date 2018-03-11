@@ -59,26 +59,25 @@ namespace MarchMadness
             //         break;
             // }
 
-            var teams = new string[] {team1Name, team2Name};
-
-            int winnerResult = -1;
+            FinalResult finalResult = null;
             var dataLoaderEngine = new DataLoaderEngine();
             var matchEngine = new MatchEngine();
-            var finalizerEngine = new FinalizerEngine();
+            var finalizerEngine = new FinalizerEngine(team1Name, team2Name);
             if(dataLoaderEngine.Load(team1Name, team2Name))
             {
                 MatchResults engineResult = matchEngine.Process(dataLoaderEngine.Team1, dataLoaderEngine.Team2);
-                winnerResult = finalizerEngine.ComputeWinner(engineResult);
+                finalResult = finalizerEngine.ComputeWinner(engineResult);
             }
             
-            if(winnerResult < 0 || winnerResult > 1)
+            if(finalResult.Winner < 0 || finalResult.Winner > 1)
             {
                 Logger.Error("Failed to decided a winner");
                 
             }
             else
             {
-                Console.WriteLine("The Winner is: " + teams[winnerResult]);
+                Console.WriteLine("The Winner is: " + (finalResult.Winner == 0 ? finalResult.Team1 : finalResult.Team2));
+                //Console.WriteLine("The Winner is: " + (finalResult.Winner == 0 ? finalResult.Team1 : finalResult.Team2) + ". Score: " + finalResult.Team1Score + " - " + finalResult.Team2Score);
             }
 
 

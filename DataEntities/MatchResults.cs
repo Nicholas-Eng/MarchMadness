@@ -6,5 +6,8 @@ namespace MarchMadness.DataEntities
     {
         public Dictionary<int, List<MatchCompareResult>> Team1Results { get; set; }
         public Dictionary<int, List<MatchCompareResult>> Team2Results { get; set; }
+
+        public Dictionary<int, List<MatchCompareResult>> Team1ScoreResults { get; set; }
+        public Dictionary<int, List<MatchCompareResult>> Team2ScoreResults { get; set; }
     }
 }

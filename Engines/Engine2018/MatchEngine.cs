@@ -9,12 +9,17 @@ namespace MarchMadness.Engines.Engine2018
         private readonly Dictionary<int, List<MatchCompareResult>> _team1Results = new Dictionary<int, List<MatchCompareResult>>();
         private readonly Dictionary<int, List<MatchCompareResult>> _team2Results = new Dictionary<int, List<MatchCompareResult>>();
 
+        private readonly Dictionary<int, List<MatchCompareResult>> _team1ScoreResults = new Dictionary<int, List<MatchCompareResult>>();
+        private readonly Dictionary<int, List<MatchCompareResult>> _team2ScoreResults = new Dictionary<int, List<MatchCompareResult>>();
+
         public MatchResults Process(Team team1, Team team2)
         {
             var results = new MatchResults() 
             { 
                 Team1Results = _team1Results, 
-                Team2Results = _team2Results
+                Team2Results = _team2Results,
+                Team1ScoreResults = _team1ScoreResults,
+                Team2ScoreResults = _team2ScoreResults
             };
 
             if(team1 == null)
@@ -34,20 +39,43 @@ namespace MarchMadness.Engines.Engine2018
             {
                 _team1Results.Add(season, new List<MatchCompareResult>());
                 _team2Results.Add(season, new List<MatchCompareResult>());
+                _team1ScoreResults.Add(season, new List<MatchCompareResult>());
+                _team2ScoreResults.Add(season, new List<MatchCompareResult>());
 
                 Season team1Season = team1.Seasons[season];
                 Season team2Season = team2.Seasons[season];
-                ProcessSeason(season, team1Season, team2Season);
+                CompareSeason(season, team1Season, team2Season);
+                LoadSeasonScores(season, team1Season, team2Season);
             }
 
             return results;
         }
 
-        private void ProcessSeason(int season, Season team1Season, Season team2Season) {
+        private void CompareSeason(int season, Season team1Season, Season team2Season) {
             CompareSeeds(season, team1Season.Seed, team2Season.Seed);
             CompareConferences(season, team1Season.Conference.ConferenceRanking, team2Season.Conference.ConferenceRanking);
             CompareRegularSeason(season, team1Season.RegularSeason, team2Season.RegularSeason);
             CompareNCAATourneySeason(season, team1Season.NCAATourneySeason, team2Season.NCAATourneySeason);
+        }
+
+        private void LoadSeasonScores(int season, Season team1Season, Season team2Season) {
+            var t1RegWinScoreResult = new MatchCompareResult() { Category = "Regular Season Average Win Score", Value = team1Season.RegularSeason.AverageRegularSeasonWinScore };
+            var t1RegLoseScoreResult = new MatchCompareResult() { Category = "Regular Season Average Lose Score", Value = team1Season.RegularSeason.AverageRegularSeasonLoseScore };
+            var t1TourneyWinScoreResult = new MatchCompareResult() { Category = "Tourney Season Average Win Score", Value = team1Season.NCAATourneySeason.AverageNCAATourneySeasonWinScore };
+            var t1TourneyLoseScoreResult = new MatchCompareResult() { Category = "Tourney Season Average Lose Score", Value = team1Season.NCAATourneySeason.AverageNCAATourneySeasonLoseScore };
+            _team1ScoreResults[season].Add(t1RegWinScoreResult);
+            _team1ScoreResults[season].Add(t1RegLoseScoreResult);
+            _team1ScoreResults[season].Add(t1TourneyWinScoreResult);
+            _team1ScoreResults[season].Add(t1TourneyLoseScoreResult);
+
+            var t2RegWinScoreResult = new MatchCompareResult() { Category = "Regular Season Average Win Score", Value = team2Season.RegularSeason.AverageRegularSeasonWinScore };
+            var t2RegLoseScoreResult = new MatchCompareResult() { Category = "Regular Season Average Lose Score", Value = team2Season.RegularSeason.AverageRegularSeasonLoseScore };
+            var t2TourneyWinScoreResult = new MatchCompareResult() { Category = "Tourney Season Average Win Score", Value = team2Season.NCAATourneySeason.AverageNCAATourneySeasonWinScore };
+            var t2TourneyLoseScoreResult = new MatchCompareResult() { Category = "Tourney Season Average Lose Score", Value = team2Season.NCAATourneySeason.AverageNCAATourneySeasonLoseScore };
+            _team2ScoreResults[season].Add(t2RegWinScoreResult);
+            _team2ScoreResults[season].Add(t2RegLoseScoreResult);
+            _team2ScoreResults[season].Add(t2TourneyWinScoreResult);
+            _team2ScoreResults[season].Add(t2TourneyLoseScoreResult);
         }
 
         // Reward the team with the better seed
