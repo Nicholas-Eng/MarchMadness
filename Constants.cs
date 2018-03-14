@@ -4,8 +4,7 @@ namespace MarchMadness
     {
         public static string DATA_FOLDER { get { return "data"; } }
 
-        public static string CSV_LIST_SEASONS { get { return "2015,2016,2017"; } }
-        //public static string CSV_LIST_SEASONS { get { return "2014,2015,2016"; } }
+        public static string CSV_LIST_SEASONS { get { return "2015,2016,2017,2018"; } }
 
         #region File Names
 

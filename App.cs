@@ -69,7 +69,7 @@ namespace MarchMadness
                 finalResult = finalizerEngine.ComputeWinner(engineResult);
             }
             
-            if(finalResult.Winner < 0 || finalResult.Winner > 1)
+            if(finalResult == null || finalResult.Winner < 0 || finalResult.Winner > 1)
             {
                 Logger.Error("Failed to decided a winner");
                 
